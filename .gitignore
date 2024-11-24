@@ -1,0 +1,5 @@
+venv/
+.idea/
+ppo_grid_logs/
+tensorboard_logs/
+test_segments
