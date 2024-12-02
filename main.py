@@ -171,16 +171,27 @@ class GridDrivingEnv(gym.Env):
         return scaled_reward
 
     def _spawn_npvs(self):
-        """
-        Randomly spawn non-player vehicles across the grid.
-        Ensure they do not occupy the ego vehicle's starting position.
-        """
         npvs = []
         for _ in range(self.num_npvs):
-            row = np.random.randint(0, self.grid_size[0] - 1)  # Exclude the last row (ego's starting row)
-            col = np.random.randint(0, self.grid_size[1])  # Random lane
-            if [row, col] not in npvs:  # Avoid duplicates
-                npvs.append([row, col])
+            valid_position = False
+            while not valid_position:
+                row = np.random.randint(0, self.grid_size[0] - 2)  # Exclude the last row (ego's starting row)
+                col = np.random.randint(0, self.grid_size[1])  # Random lane
+
+                # Avoid horizontal clusters of NPVs
+                horizontal_cluster = any(
+                    [row, c] in npvs for c in range(max(0, col - 1), min(self.grid_size[1], col + 2))
+                )
+
+                # Prevent NPVs from spawning in the ego's column when ego is in the last two rows
+                ego_in_last_two_rows = self.ego_pos[0] in [self.grid_size[0] - 2, self.grid_size[0] - 2, self.grid_size[0] - 1]
+                block_ego_column = (col == self.ego_pos[1] and ego_in_last_two_rows)
+
+                # Validate position
+                if not horizontal_cluster and not block_ego_column:
+                    valid_position = True
+                    npvs.append([row, col])
+
         return npvs
 
     def _update_grid(self):

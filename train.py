@@ -47,7 +47,7 @@ model = PPO(
 model.learn(total_timesteps=200000, callback=ManualLoggingCallback())
 
 # Save the trained model
-model.save("trained_models/ppo_grid_driving_standard")
+model.save("trained_models/ppo_grid_driving_standard_1")
 
 # Plot Episode Lengths
 plt.figure(figsize=(10, 5))

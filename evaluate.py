@@ -3,7 +3,7 @@ from main import GridDrivingEnv
 import matplotlib.pyplot as plt
 
 # Load the trained model
-model = PPO.load("trained_models/ppo_grid_driving_standard")
+model = PPO.load("trained_models/ppo_grid_driving_standard_1")
 
 # Define the testing environment
 env = GridDrivingEnv(style="standard")
