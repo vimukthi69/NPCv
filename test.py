@@ -2,7 +2,7 @@ from stable_baselines3 import PPO
 from main import GridDrivingEnv
 import matplotlib.pyplot as plt
 
-model = PPO.load("ppo_grid_driving")
+model = PPO.load("trained_models/ppo_grid_driving_standard")
 env = GridDrivingEnv()
 obs, _ = env.reset()
 

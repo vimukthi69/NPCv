@@ -29,7 +29,7 @@ class ManualLoggingCallback(BaseCallback):
 
 
 # Initialize the environment
-env = Monitor(GridDrivingEnv(style="comfort"))
+env = Monitor(GridDrivingEnv(style="standard"))
 
 # Create the PPO model
 model = PPO(
@@ -44,10 +44,10 @@ model = PPO(
 )
 
 # Train the model with the custom logging callback
-model.learn(total_timesteps=100000, callback=ManualLoggingCallback())
+model.learn(total_timesteps=200000, callback=ManualLoggingCallback())
 
 # Save the trained model
-model.save("ppo_grid_driving_comfort")
+model.save("trained_models/ppo_grid_driving_standard")
 
 # Plot Episode Lengths
 plt.figure(figsize=(10, 5))

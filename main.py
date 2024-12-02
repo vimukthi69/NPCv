@@ -12,7 +12,7 @@ class GridDrivingEnv(gym.Env):
 
     metadata = {"render_modes": ["human"], "render_fps": 30}
 
-    def __init__(self, grid_size=(20, 3), num_npvs=4, style="standard"):
+    def __init__(self, grid_size=(20, 3), num_npvs=3, style="standard"):
         super(GridDrivingEnv, self).__init__()
         self.grid_size = grid_size
         self.num_npvs = num_npvs
@@ -193,14 +193,15 @@ class GridDrivingEnv(gym.Env):
     # helper functions
     def _is_vehicle_ahead(self):
         row, col = self.ego_pos
-        if row > 0:
-            return self.grid[row - 1, col] == 2  # Check the cell ahead
+        for r in range(row - 1, max(-1, row - 3), -1):  # Look up to 2 cells ahead
+            if self.grid[r, col] == 2:  # Check for NPV
+                return True
         return False
 
     def _is_vehicle_in_lane(self, lane):
         row, col = self.ego_pos
         # Check the lane for vehicles in the next few rows
-        for r in range(row - 1, max(-1, row - 3), -1):  # Look ahead up to 3 cells
+        for r in range(row - 1, max(-1, row - 5), -1):  # Look ahead up to 3 cells
             if self.grid[r, lane] == 2:
                 return True
         return False
