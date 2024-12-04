@@ -12,7 +12,7 @@ class GridDrivingEnv(gym.Env):
 
     metadata = {"render_modes": ["human"], "render_fps": 30}
 
-    def __init__(self, grid_size=(20, 3), num_npvs=3, style="standard"):
+    def __init__(self, grid_size=(20, 3), num_npvs=4, style="standard"):
         super(GridDrivingEnv, self).__init__()
         self.grid_size = grid_size
         self.num_npvs = num_npvs
@@ -184,8 +184,9 @@ class GridDrivingEnv(gym.Env):
                 )
 
                 # Prevent NPVs from spawning in the ego's column when ego is in the last two rows
-                ego_in_last_two_rows = self.ego_pos[0] in [self.grid_size[0] - 2, self.grid_size[0] - 2, self.grid_size[0] - 1]
-                block_ego_column = (col == self.ego_pos[1] and ego_in_last_two_rows)
+                ego_in_last_rows = self.ego_pos[0] in [self.grid_size[0] - 1, self.grid_size[0] - 2,
+                                                       self.grid_size[0] - 3]
+                block_ego_column = (col == self.ego_pos[1] and ego_in_last_rows)
 
                 # Validate position
                 if not horizontal_cluster and not block_ego_column:

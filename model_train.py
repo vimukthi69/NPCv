@@ -35,16 +35,16 @@ env = Monitor(GridDrivingEnv(style="standard"))
 model = PPO(
     "MlpPolicy",
     env,
-    n_steps=4096,
-    batch_size=128,
-    gamma=0.997,
-    ent_coef=0.1,
-    learning_rate=0.0003,
+    n_steps=1024,
+    batch_size=32,
+    gamma=0.99,
+    ent_coef=0.05,
+    learning_rate=0.0001,
     verbose=1
 )
 
 # Train the model with the custom logging callback
-model.learn(total_timesteps=200000, callback=ManualLoggingCallback())
+model.learn(total_timesteps=500000, callback=ManualLoggingCallback())
 
 # Save the trained model
 model.save("trained_models/ppo_grid_driving_standard_1")

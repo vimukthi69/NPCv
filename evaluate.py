@@ -3,10 +3,10 @@ from main import GridDrivingEnv
 import matplotlib.pyplot as plt
 
 # Load the trained model
-model = PPO.load("trained_models/ppo_grid_driving_standard_1")
+model = PPO.load("trained_curriculum_models/ppo_grid_driving_aggressive_curriculum")
 
 # Define the testing environment
-env = GridDrivingEnv(style="standard")
+env = GridDrivingEnv(style="aggressive")
 
 
 # Helper function to render the grid
