@@ -1,10 +1,6 @@
 import numpy as np
 import gymnasium as gym
 from gymnasium import spaces
-import matplotlib.pyplot as plt
-import time
-from stable_baselines3 import PPO
-from stable_baselines3.common.env_checker import check_env
 
 
 class GridDrivingEnv(gym.Env):
@@ -80,14 +76,6 @@ class GridDrivingEnv(gym.Env):
         pass
 
     def _move_ego(self, action):
-        """
-        Overtake logic in the paper
-        Step 1: Check if the left lane is clear.
-        Step 2: Move into the left lane.
-        Step 3: Continue moving forward until the slower vehicle in the original lane is passed
-        :param action:
-        :return: next position
-        """
         row, col = self.ego_pos
 
         if action == 0:  # Keep Lane
@@ -217,21 +205,3 @@ class GridDrivingEnv(gym.Env):
             if self.grid[r, lane] == 2:
                 return True
         return False
-
-
-# env = GridDrivingEnv()
-#
-# # Reset the environment
-# obs, _ = env.reset()
-# env.render()
-# total_reward = 0
-# # Perform a few random steps
-# for _ in range(10):
-#     action = env.action_space.sample()  # Choose a random action
-#     obs, reward, terminated, truncated, info = env.step(action)
-#     total_reward += reward
-#     env.render()  # Print the grid for visualization
-#     print(f"Action: {action}, Reward: {reward}, Total Reward: {total_reward}")
-#     if terminated or truncated:
-#         print("Episode finished!")
-#         break

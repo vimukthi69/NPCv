@@ -2,11 +2,11 @@ from stable_baselines3 import PPO
 from main import GridDrivingEnv
 import matplotlib.pyplot as plt
 
-# Load the trained model
-model = PPO.load("trained_curriculum_models/ppo_grid_driving_aggressive_curriculum")
+# Loading the trained model
+model = PPO.load("trained_curriculum_models/ppo_grid_driving_standard_curriculum_update")
 
-# Define the testing environment
-env = GridDrivingEnv(style="aggressive")
+# Loading the testing environment
+env = GridDrivingEnv(style="standard")
 
 
 # Helper function to render the grid
@@ -25,27 +25,27 @@ collisions = 0
 # Collision penalties for each driving style
 collision_penalties = [-1, -2, -0.5]
 
-# Run multiple episodes
+# Running for 20 episodes
 for episode in range(num_runs):
     print("Episode : ", episode+1)
     obs, _ = env.reset()
-    episode_collided = False  # Track if a collision occurs in the episode
+    episode_collided = False
 
     while True:
-        action, _states = model.predict(obs)  # Get action from the trained model
+        action, _states = model.predict(obs)
         obs, reward, terminated, truncated, info = env.step(action)
         render_grid(env.grid)
 
         # Check for collision based on reward value
-        if reward in collision_penalties:  # Reward matches a collision penalty
+        if reward in collision_penalties:
             print("collided")
             episode_collided = True
 
-        if terminated or truncated:  # End of the episode
+        if terminated or truncated:
             if episode_collided:
-                collisions += 1  # Increment collision count for this episode
+                collisions += 1
             break
 
-# Calculate collision rate as a percentage
+# Calculating collision rate as a percentage
 collision_rate = (collisions / num_runs) * 100
 print(f"Collision Rate: {collision_rate:.2f}%")

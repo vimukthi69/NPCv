@@ -17,14 +17,13 @@ class ManualLoggingCallback(BaseCallback):
         super(ManualLoggingCallback, self).__init__(verbose)
 
     def _on_step(self) -> bool:
-        # Check for episode info in environment logs
         if "infos" in self.locals:
             infos = self.locals["infos"]
             for info in infos:
                 # Log custom metrics if they are available
                 if "episode" in info.keys():
-                    episode_lengths.append(info["episode"]["l"])  # Episode length
-                    cumulative_rewards.append(info["episode"]["r"])  # Cumulative reward
+                    episode_lengths.append(info["episode"]["l"])
+                    cumulative_rewards.append(info["episode"]["r"])
         return True
 
 
@@ -35,19 +34,19 @@ env = Monitor(GridDrivingEnv(style="standard"))
 model = PPO(
     "MlpPolicy",
     env,
-    n_steps=1024,
-    batch_size=32,
+    n_steps=2048,
+    batch_size=64,
     gamma=0.99,
-    ent_coef=0.05,
+    ent_coef=0.1,
     learning_rate=0.0001,
     verbose=1
 )
 
 # Train the model with the custom logging callback
-model.learn(total_timesteps=500000, callback=ManualLoggingCallback())
+model.learn(total_timesteps=200000, callback=ManualLoggingCallback())
 
 # Save the trained model
-model.save("trained_models/ppo_grid_driving_standard_1")
+model.save("ttrained_curriculum_models/ppo_grid_driving_standard_curriculum_update")
 
 # Plot Episode Lengths
 plt.figure(figsize=(10, 5))
